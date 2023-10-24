@@ -101,3 +101,14 @@ class Test_LLMUtils_Pipeline(unittest.TestCase):
         pipeline.plot()
         pipeline.execute()
         del pipeline
+
+    def test_ResumableTextPipeline_with_fuzzyDedup(self):
+        pipeline = ResumableTextPipeline()
+        ops = [
+            JsonlReader("tests/data/llm_data/"),
+            LengthFilter(),
+            FuzzyDeduplicate(),
+            PerfileParquetWriter("ResumableTextPipeline_output")
+        ]
+        pipeline.add_operations(ops)
+        pipeline.execute()
