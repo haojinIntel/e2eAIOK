@@ -112,3 +112,14 @@ class Test_LLMUtils_Pipeline(unittest.TestCase):
         ]
         pipeline.add_operations(ops)
         pipeline.execute()
+
+    def test_ResumableTextPipeline_with_globalDedup(self):
+        pipeline = ResumableTextPipeline()
+        ops = [
+            JsonlReader("tests/data/llm_data/"),
+            LengthFilter(),
+            GlobalDeduplicate(),
+            PerfileParquetWriter("ResumableTextPipeline_output")
+        ]
+        pipeline.add_operations(ops)
+        pipeline.execute()
